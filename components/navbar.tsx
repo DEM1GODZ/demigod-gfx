@@ -13,12 +13,9 @@ interface NavbarProps {
   isGalleryOpen: boolean
   onGalleryClose: () => void
   onGalleryOpen: () => void
-  isPricingOpen: boolean
-  onPricingClose: () => void
-  onPricingOpen: () => void
 }
 
-export function Navbar({ isGalleryOpen, onGalleryClose, onGalleryOpen, isPricingOpen, onPricingClose, onPricingOpen }: NavbarProps) {
+export function Navbar({ isGalleryOpen, onGalleryClose, onGalleryOpen }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -34,9 +31,6 @@ export function Navbar({ isGalleryOpen, onGalleryClose, onGalleryOpen, isPricing
     setIsMenuOpen(false)
     if (isGalleryOpen) {
       onGalleryClose()
-    }
-    if (isPricingOpen) {
-      onPricingClose()
     }
     setTimeout(() => {
       const element = document.querySelector(href)
@@ -62,9 +56,6 @@ export function Navbar({ isGalleryOpen, onGalleryClose, onGalleryOpen, isPricing
     setIsMenuOpen(false)
     if (isGalleryOpen) {
       onGalleryClose()
-    }
-    if (isPricingOpen) {
-      onPricingClose()
     }
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: "smooth" })
