@@ -37,36 +37,6 @@ export function Footer() {
 
   return (
     <footer id="footer" className="relative">
-      {/* Pricing CTA */}
-      <motion.button
-        onClick={() => window.dispatchEvent(new CustomEvent("openPricing"))}
-        data-cursor-hover
-        className="relative block w-full overflow-hidden"
-        whileHover={{ scale: 1 }}
-      >
-        <div className="relative py-16 md:py-24 px-8 md:px-12 border-t border-white/10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            <motion.h2
-              className="font-sans text-4xl md:text-6xl lg:text-7xl font-light tracking-tight text-center md:text-left"
-              whileHover={{ color: "#fafafa" }}
-              transition={{ duration: 0.3 }}
-            >
-              View <span className="italic">Pricing</span>
-            </motion.h2>
-
-            <motion.div
-              whileHover={{ rotate: 45, scale: 1.1 }}
-              transition={{ duration: 0.3 }}
-              className="text-white"
-            >
-              <svg className="w-12 h-12 md:w-16 md:h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </motion.div>
-          </div>
-        </div>
-      </motion.button>
-
       {/* Main CTA */}
       <motion.a
         href="mailto:demigod.business1@gmail.com"
