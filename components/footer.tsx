@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, Zap } from "lucide-react"
 
 export function Footer() {
   const [time, setTime] = useState("")
@@ -58,9 +58,13 @@ export function Footer() {
             </motion.h2>
 
             <motion.div
+              animate={{
+                scale: 1,
+              }}
               whileHover={{ scale: 1.1 }}
+              transition={{ duration: 0.3 }}
             >
-              <div className="text-white/80">→</div>
+              <Zap className="w-8 h-8 md:w-10 md:h-10 text-white/80" />
             </motion.div>
           </div>
         </div>
