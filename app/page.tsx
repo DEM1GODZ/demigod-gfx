@@ -35,7 +35,13 @@ export default function Home() {
   return (
     <SmoothScroll>
       <CustomCursor />
-      <Navbar isGalleryOpen={isGalleryOpen} onGalleryClose={() => setIsGalleryOpen(false)} onGalleryOpen={() => setIsGalleryOpen(true)} />
+      <Navbar 
+        isGalleryOpen={isGalleryOpen} 
+        onGalleryClose={() => setIsGalleryOpen(false)} 
+        onGalleryOpen={() => setIsGalleryOpen(true)}
+        isPricingOpen={isPricingOpen}
+        onPricingClose={() => setIsPricingOpen(false)}
+      />
       <main>
         <Hero />
         <SectionBlend />
