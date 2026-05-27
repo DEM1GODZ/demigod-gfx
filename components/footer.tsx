@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, Zap } from "lucide-react"
 
 export function Footer() {
   const [time, setTime] = useState("")
@@ -35,8 +35,41 @@ export function Footer() {
     }
   }
 
+  const handlePricingClick = () => {
+    window.dispatchEvent(new Event("openPricing"))
+  }
+
   return (
     <footer id="footer" className="relative">
+      {/* Pricing CTA */}
+      <motion.button
+        onClick={handlePricingClick}
+        data-cursor-hover
+        className="relative block overflow-hidden w-full"
+        whileHover={{ backgroundColor: "rgba(34, 197, 94, 0.15)" }}
+      >
+        {/* Content */}
+        <div className="relative py-12 md:py-16 px-8 md:px-12 border-t border-white/10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <motion.h2
+              className="font-sans text-3xl md:text-4xl lg:text-5xl font-light tracking-tight text-center md:text-left"
+            >
+              View <span className="italic">Pricing</span>
+            </motion.h2>
+
+            <motion.div
+              animate={{
+                scale: 1,
+              }}
+              whileHover={{ scale: 1.1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Zap className="w-8 h-8 md:w-10 md:h-10 text-white/80" />
+            </motion.div>
+          </div>
+        </div>
+      </motion.button>
+
       {/* Main CTA */}
       <motion.a
         href="mailto:demigod.business1@gmail.com"
