@@ -65,18 +65,30 @@ export function Gallery({ isOpen, onClose }: GalleryProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-40 bg-background"
+          className="fixed inset-0 z-40 bg-background overflow-hidden"
         >
           {/* Main Gallery Container */}
           <div className="relative w-full h-screen flex flex-col md:flex-row overflow-hidden">
             {/* Left Main Content - Large Dynamic Frame */}
-            <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-12 relative border-r border-white/10">
+            <div className="flex-1 flex flex-col items-center justify-center overflow-y-auto p-4 md:p-12 relative md:border-r border-white/10">
+              {/* Close Button - Fixed at top */}
+              <motion.button
+                onClick={onClose}
+                data-cursor-hover
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
+                className="absolute top-4 md:top-8 left-4 md:left-8 text-white hover:text-white/70 transition-colors z-50"
+                aria-label="Close gallery"
+              >
+                <X className="w-8 h-8" />
+              </motion.button>
+
               <motion.div
                 layoutId="gallery-frame"
                 transition={{ 
                   layout: { duration: 0.5, ease: "easeInOut" }
                 }}
-                className="relative w-full h-auto max-h-[70vh] bg-black rounded-lg overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-300"
+                className="relative w-full max-w-lg md:max-w-none h-auto max-h-[50vh] md:max-h-[70vh] bg-black rounded-lg overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-300 mt-12 md:mt-0"
                 style={{
                   aspectRatio: selectedItem?.aspectRatio || 1.5,
                 }}
@@ -110,27 +122,16 @@ export function Gallery({ isOpen, onClose }: GalleryProps) {
                 </p>
               </motion.div>
 
-              {/* Close Button */}
-              <motion.button
-                onClick={onClose}
-                data-cursor-hover
-                whileHover={{ scale: 1.1, rotate: 90 }}
-                whileTap={{ scale: 0.9 }}
-                className="absolute top-8 left-8 text-white hover:text-white/70 transition-colors z-50"
-                aria-label="Close gallery"
-              >
-                <X className="w-8 h-8" />
-              </motion.button>
             </div>
 
-            {/* Right Sidebar - Scrollable Thumbnails */}
-            <div className="w-full md:w-72 flex-shrink-0 border-l border-white/10 bg-background/50 backdrop-blur-sm overflow-y-auto">
-              <div className="flex flex-col gap-2 p-4">
+            {/* Right Sidebar - Scrollable Thumbnails - Mobile Horizontal, Desktop Vertical */}
+            <div className="w-full md:w-72 flex-shrink-0 md:border-l md:border-t-0 border-t border-white/10 bg-background/50 backdrop-blur-sm overflow-x-auto md:overflow-x-visible md:overflow-y-auto">
+              <div className="flex md:flex-col gap-2 p-4">
                 {galleryItems.map((item) => (
                   <motion.button
                     key={item.id}
                     onClick={() => setSelectedId(item.id)}
-                    className={`relative rounded-lg overflow-hidden border transition-all duration-300 text-left group ${
+                    className={`relative rounded-lg overflow-hidden border transition-all duration-300 text-left group flex-shrink-0 md:flex-shrink md:w-full ${
                       selectedId === item.id
                         ? "border-white/80 ring-2 ring-[#2563eb]"
                         : "border-white/20 hover:border-white/40"
@@ -138,7 +139,7 @@ export function Gallery({ isOpen, onClose }: GalleryProps) {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <div className="w-full h-32 relative overflow-hidden bg-black">
+                    <div className="w-20 md:w-full h-20 md:h-32 relative overflow-hidden bg-black flex-shrink-0">
                       <img
                         src={item.image}
                         alt={item.title}
