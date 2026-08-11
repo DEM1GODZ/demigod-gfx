@@ -141,7 +141,7 @@ export function Pricing({ isOpen, onClose }: PricingProps) {
 
                   {/* CTA Button */}
                   <motion.a
-                    href="mailto:demigod.business1@gmail.com"
+                    href="mailto:demigod.business1@gmail.com?subject=Standard%20GFX%20Order%20Inquiry&body=Hi%20Demigod%2C%0A%0AI%27d%20like%20to%20order%20the%20Standard%20Tier.%0A%0AProject%20details%3A"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className="w-full px-6 py-3 sm:py-4 rounded-lg border border-white/30 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-mono text-xs sm:text-sm tracking-wider transition-all duration-300 hover:border-white/50 text-center block"
@@ -212,7 +212,7 @@ export function Pricing({ isOpen, onClose }: PricingProps) {
 
                   {/* CTA Button - Premium Style */}
                   <motion.a
-                    href="mailto:demigod.business1@gmail.com"
+                    href="mailto:demigod.business1@gmail.com?subject=Premium%20GFX%20Order%20Inquiry&body=Hi%20Demigod%2C%0A%0AI%27d%20like%20to%20order%20the%20Premium%20Tier.%0A%0AProject%20details%3A"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className="w-full px-6 py-3 sm:py-4 rounded-lg bg-gradient-to-r from-purple-600/80 to-blue-600/80 hover:from-purple-600 hover:to-blue-600 border border-white/30 backdrop-blur-md text-white font-mono text-xs sm:text-sm tracking-wider transition-all duration-300 hover:border-white/50 text-center block"
