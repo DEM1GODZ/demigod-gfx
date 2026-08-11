@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Copy, ExternalLink, Mail, MessageCircle, X } from "lucide-react"
 
@@ -34,6 +34,8 @@ const contactOptions = [
 ]
 
 export function ContactMenu({ isOpen, onClose }: ContactMenuProps) {
+  const [copiedEmail, setCopiedEmail] = useState(false)
+
   useEffect(() => {
     if (!isOpen) return
 
@@ -52,6 +54,12 @@ export function ContactMenu({ isOpen, onClose }: ContactMenuProps) {
   const handleOptionClick = async (option: (typeof contactOptions)[number]) => {
     if (option.label === "Discord") {
       await navigator.clipboard?.writeText("demigod_akshu")
+      return
+    }
+    if (option.label === "Email") {
+      await navigator.clipboard?.writeText("demigod.business1@gmail.com")
+      setCopiedEmail(true)
+      window.setTimeout(() => setCopiedEmail(false), 2400)
       return
     }
     onClose()
@@ -110,7 +118,7 @@ export function ContactMenu({ isOpen, onClose }: ContactMenuProps) {
                       target={option.label === "Pinterest" ? "_blank" : undefined}
                       rel={option.label === "Pinterest" ? "noopener noreferrer" : undefined}
                       onClick={(event) => {
-                        if (isDiscord) event.preventDefault()
+                        if (isDiscord || option.label === "Email") event.preventDefault()
                         void handleOptionClick(option)
                       }}
                       className="group flex min-h-20 items-center gap-4 rounded-2xl border border-white/15 bg-white/[0.08] p-4 transition-colors hover:border-white/35 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:p-5"
@@ -123,9 +131,11 @@ export function ContactMenu({ isOpen, onClose }: ContactMenuProps) {
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block font-sans text-lg text-foreground">{option.label}</span>
-                        <span className="block truncate font-mono text-[11px] tracking-wide text-muted-foreground">{option.detail}</span>
+                        <span className="block truncate font-mono text-[11px] tracking-wide text-muted-foreground">
+                          {option.label === "Email" && copiedEmail ? "Email copied — paste it into your mail app" : option.detail}
+                        </span>
                       </span>
-                      {isDiscord ? <Copy className="h-4 w-4 text-muted-foreground" /> : <ExternalLink className="h-4 w-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />}
+                      {isDiscord || (option.label === "Email" && copiedEmail) ? <Copy className="h-4 w-4 text-accent" /> : <ExternalLink className="h-4 w-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />}
                     </motion.a>
                   )
                 })}
