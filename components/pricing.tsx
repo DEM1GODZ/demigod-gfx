@@ -146,7 +146,7 @@ export function Pricing({ isOpen, onClose }: PricingProps) {
                     whileTap={{ scale: 0.98 }}
                     className="w-full px-6 py-3 sm:py-4 rounded-lg border border-white/30 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-mono text-xs sm:text-sm tracking-wider transition-all duration-300 hover:border-white/50 text-center block"
                   >
-                    Order Now
+                    Select Plan
                   </motion.a>
                 </div>
               </motion.div>

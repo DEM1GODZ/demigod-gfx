@@ -9,6 +9,10 @@ export function CustomCursor() {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
+    if (window.matchMedia("(hover: none), (pointer: coarse)").matches) {
+      return
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY })
       setIsVisible(true)
