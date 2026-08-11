@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Copy, ExternalLink, Mail, MessageCircle, X } from "lucide-react"
 
@@ -34,8 +34,6 @@ const contactOptions = [
 ]
 
 export function ContactMenu({ isOpen, onClose }: ContactMenuProps) {
-  const [copiedEmail, setCopiedEmail] = useState(false)
-
   useEffect(() => {
     if (!isOpen) return
 
@@ -57,9 +55,7 @@ export function ContactMenu({ isOpen, onClose }: ContactMenuProps) {
       return
     }
     if (option.label === "Email") {
-      await navigator.clipboard?.writeText("demigod.business1@gmail.com")
-      setCopiedEmail(true)
-      window.setTimeout(() => setCopiedEmail(false), 2400)
+      onClose()
       return
     }
     onClose()
@@ -94,7 +90,7 @@ export function ContactMenu({ isOpen, onClose }: ContactMenuProps) {
                 type="button"
                 onClick={onClose}
                 aria-label="Close contact menu"
-                className="absolute right-0 top-0 rounded-full border border-white/15 bg-white/10 p-2 text-muted-foreground transition hover:bg-white/20 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="absolute right-0 top-0 z-20 flex h-11 w-11 touch-manipulation items-center justify-center rounded-full border border-white/20 bg-white/10 text-muted-foreground transition-colors hover:bg-white/20 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -118,8 +114,12 @@ export function ContactMenu({ isOpen, onClose }: ContactMenuProps) {
                       target={option.label === "Pinterest" ? "_blank" : undefined}
                       rel={option.label === "Pinterest" ? "noopener noreferrer" : undefined}
                       onClick={(event) => {
-                        if (isDiscord || option.label === "Email") event.preventDefault()
-                        void handleOptionClick(option)
+                        if (isDiscord) {
+                          event.preventDefault()
+                          void handleOptionClick(option)
+                        } else {
+                          onClose()
+                        }
                       }}
                       className="group flex min-h-20 items-center gap-4 rounded-2xl border border-white/15 bg-white/[0.08] p-4 transition-colors hover:border-white/35 hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:p-5"
                       initial={{ opacity: 0, y: 12 }}
@@ -132,10 +132,10 @@ export function ContactMenu({ isOpen, onClose }: ContactMenuProps) {
                       <span className="min-w-0 flex-1">
                         <span className="block font-sans text-lg text-foreground">{option.label}</span>
                         <span className="block truncate font-mono text-[11px] tracking-wide text-muted-foreground">
-                          {option.label === "Email" && copiedEmail ? "Email copied — paste it into your mail app" : option.detail}
+                          {option.detail}
                         </span>
                       </span>
-                      {isDiscord || (option.label === "Email" && copiedEmail) ? <Copy className="h-4 w-4 text-accent" /> : <ExternalLink className="h-4 w-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />}
+                      {isDiscord ? <Copy className="h-4 w-4 text-accent" /> : <ExternalLink className="h-4 w-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />}
                     </motion.a>
                   )
                 })}

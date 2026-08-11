@@ -46,7 +46,7 @@ export function Pricing({ isOpen, onClose }: PricingProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-40 bg-background flex items-center justify-center p-4 sm:p-6 md:p-8"
+          className="fixed inset-0 z-40 flex items-center justify-center bg-background/75 p-4 backdrop-blur-xl sm:p-6 md:p-8"
         >
           {/* Close Button */}
           <motion.button
@@ -90,7 +90,7 @@ export function Pricing({ isOpen, onClose }: PricingProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="group relative overflow-hidden rounded-2xl backdrop-blur-2xl border border-white/30 bg-white/8 hover:border-white/50 hover:bg-white/12 transition-all duration-300"
+                className="group relative overflow-hidden rounded-[1.75rem] border border-white/25 bg-white/[0.09] shadow-2xl shadow-black/30 backdrop-blur-2xl backdrop-saturate-150 transition-all duration-300 hover:border-white/45 hover:bg-white/[0.14]"
               >
                 {/* Gradient overlay on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -156,7 +156,7 @@ export function Pricing({ isOpen, onClose }: PricingProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="group relative overflow-hidden rounded-2xl backdrop-blur-2xl border border-white/40 bg-white/10 hover:border-white/60 hover:bg-white/15 transition-all duration-300 md:scale-105 md:origin-center"
+                className="group relative overflow-hidden rounded-[1.75rem] border border-white/35 bg-white/[0.12] shadow-2xl shadow-purple-950/30 backdrop-blur-2xl backdrop-saturate-150 transition-all duration-300 hover:border-white/60 hover:bg-white/[0.18] md:scale-105 md:origin-center"
               >
                 {/* Recommended Badge */}
                 <div className="absolute top-0 right-0 px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 border-b border-l border-white/30 text-purple-300 text-xs sm:text-sm font-mono tracking-widest">
