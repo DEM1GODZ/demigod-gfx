@@ -35,6 +35,18 @@ const galleryItems = [
     image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/b2665b8598c8cc6875173c09b333e107-IUTryvtN9j0YggyJ1kyzM8EBMYk7t7.jpg",
     aspectRatio: 1.25,
   },
+  {
+    id: 6,
+    title: "Malevolent Crunch",
+    image: "/gallery/malevolent-crunch.jpg",
+    aspectRatio: 1.42,
+  },
+  {
+    id: 7,
+    title: "Minecraft Composition",
+    image: "/gallery/minecraft-composition.jpeg",
+    aspectRatio: 1.78,
+  },
 ]
 
 interface GalleryProps {
