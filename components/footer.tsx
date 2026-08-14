@@ -4,7 +4,11 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { ArrowUpRight, Zap } from "lucide-react"
 
-export function Footer() {
+interface FooterProps {
+  onContactOpen: () => void
+}
+
+export function Footer({ onContactOpen }: FooterProps) {
   const [time, setTime] = useState("")
   const [isHovered, setIsHovered] = useState(false)
   const [copyFeedback, setCopyFeedback] = useState("")
@@ -71,10 +75,11 @@ export function Footer() {
       </motion.button>
 
       {/* Main CTA */}
-      <motion.a
-        href="mailto:demigod.business1@gmail.com"
+      <motion.button
+        type="button"
+        onClick={onContactOpen}
         data-cursor-hover
-        className="relative block overflow-hidden"
+        className="relative block w-full overflow-hidden text-left"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -110,7 +115,7 @@ export function Footer() {
             </motion.div>
           </div>
         </div>
-      </motion.a>
+      </motion.button>
 
       {/* Footer Info */}
       <div className="px-8 md:px-12 py-8 border-t border-white/10">

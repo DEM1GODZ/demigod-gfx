@@ -15,9 +15,11 @@ interface NavbarProps {
   onGalleryOpen: () => void
   isPricingOpen?: boolean
   onPricingClose?: () => void
+  isContactOpen?: boolean
+  onContactClose?: () => void
 }
 
-export function Navbar({ isGalleryOpen, onGalleryClose, onGalleryOpen, isPricingOpen, onPricingClose }: NavbarProps) {
+export function Navbar({ isGalleryOpen, onGalleryClose, onGalleryOpen, isPricingOpen, onPricingClose, isContactOpen, onContactClose }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -37,6 +39,9 @@ export function Navbar({ isGalleryOpen, onGalleryClose, onGalleryOpen, isPricing
     if (isPricingOpen && onPricingClose) {
       onPricingClose()
     }
+    if (isContactOpen && onContactClose) {
+      onContactClose()
+    }
     setTimeout(() => {
       const element = document.querySelector(href)
       if (element) {
@@ -49,6 +54,9 @@ export function Navbar({ isGalleryOpen, onGalleryClose, onGalleryOpen, isPricing
     setIsMenuOpen(false)
     if (isPricingOpen && onPricingClose) {
       onPricingClose()
+    }
+    if (isContactOpen && onContactClose) {
+      onContactClose()
     }
     if (label === "Works") {
       setTimeout(() => {
@@ -69,6 +77,9 @@ export function Navbar({ isGalleryOpen, onGalleryClose, onGalleryOpen, isPricing
     }
     if (isPricingOpen && onPricingClose) {
       onPricingClose()
+    }
+    if (isContactOpen && onContactClose) {
+      onContactClose()
     }
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: "smooth" })
