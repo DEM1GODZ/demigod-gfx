@@ -80,7 +80,7 @@ export function Pricing({ isOpen, onClose }: PricingProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 flex items-center justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-xl sm:p-8">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 flex items-start justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-xl sm:items-center sm:p-8">
           <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-45 blur-2xl">
             <SentientSphere />
           </div>
@@ -88,11 +88,11 @@ export function Pricing({ isOpen, onClose }: PricingProps) {
             <X data-icon="inline-start" />
           </button>
 
-          <div className="relative z-10 mx-auto w-full max-w-7xl py-12 sm:py-8">
-            <header className="mx-auto mb-8 max-w-2xl text-center sm:mb-10">
-              <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.35em] text-blue-300/80">DEMIGOD_GFX / SERVICES</p>
-              <h2 className="font-sans text-4xl font-light tracking-tight text-white sm:text-6xl">Pricing</h2>
-              <p className="mt-3 text-sm leading-6 text-white/60 sm:text-base">Choose which tier fits your idea and click on the button to make it real</p>
+          <div className="relative z-10 mx-auto w-full max-w-[1060px] min-w-0 py-12 sm:py-8">
+            <header className="mx-auto mb-8 max-w-xl text-center sm:mb-10">
+              <p className="mx-auto mb-4 inline-flex rounded-full border border-white/15 bg-white/[0.04] px-3 py-1 font-mono text-[10px] text-white/65">Pricing</p>
+              <h2 className="font-sans text-[2.65rem] font-light leading-[0.95] tracking-[-0.045em] text-white sm:text-6xl">Simple, transparent<br />pricing</h2>
+              <p className="mx-auto mt-5 max-w-md text-xs leading-5 text-white/50 sm:text-sm">Choose which tier fits your idea and click on the button to make it real</p>
               <button onClick={() => { onClose(); window.setTimeout(() => window.dispatchEvent(new Event("openGallery")), 350) }} className="mt-5 rounded-full border border-white/20 bg-white/10 px-4 py-2 font-mono text-[11px] tracking-wide text-white/80 backdrop-blur-xl transition hover:border-blue-300/60 hover:bg-white/15 hover:text-white">
                 Unsure? Take a look at some sample designs first!
               </button>
@@ -102,13 +102,13 @@ export function Pricing({ isOpen, onClose }: PricingProps) {
               </div>
             </header>
 
-            <div className="grid gap-5 lg:grid-cols-3">
+            <div className="grid min-w-0 grid-cols-1 gap-4 md:grid-cols-3 md:items-center md:gap-3">
               {plans.map((plan, index) => (
-                <motion.article key={plan.key} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.08 }} className={`group relative flex flex-col overflow-hidden rounded-[1.75rem] border p-6 shadow-2xl backdrop-blur-2xl backdrop-saturate-150 sm:p-7 ${plan.key === "premium" ? "border-blue-200/50 bg-white/[0.14] shadow-blue-950/50 lg:-translate-y-3" : "border-white/20 bg-white/[0.08] shadow-black/30"}`}>
+                <motion.article key={plan.key} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.08 }} className={`group relative flex min-w-0 flex-col overflow-hidden rounded-xl border p-5 shadow-2xl backdrop-blur-2xl backdrop-saturate-150 sm:p-6 ${plan.key === "premium" ? "border-blue-300/50 bg-gradient-to-br from-blue-950/50 via-white/[0.09] to-amber-950/40 shadow-blue-950/50 md:-translate-y-2" : "border-white/15 bg-white/[0.025] shadow-black/30"}`}>
                   {plan.key === "premium" && <div className="pointer-events-none absolute -top-32 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-gradient-to-br from-blue-400/40 via-amber-200/20 to-transparent blur-3xl" />}
                   <div className="relative flex-1">
                     {plan.key === "premium" && <span className="mb-5 inline-flex rounded-full border border-amber-200/30 bg-amber-100/10 px-3 py-1 font-mono text-[10px] tracking-[0.2em] text-amber-100">MOST PREFERRED</span>}
-                    <h3 className="text-2xl font-light text-white">{plan.name}</h3>
+                    <h3 className="text-xl font-light tracking-tight text-white">{plan.name}</h3>
                     <p className="mt-5 min-h-14 text-sm leading-6 text-white/60">{plan.scope}</p>
                     <div className="my-7 border-y border-white/10 py-5">
                       <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40">{currency === "robux" ? "Robux pricing" : "Nitro / USD pricing"}</p>
