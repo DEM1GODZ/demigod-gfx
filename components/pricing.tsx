@@ -1,228 +1,159 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Check, X } from "lucide-react"
+import { useEffect, useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
+import { Check, ChevronLeft, Copy, Mail, X } from "lucide-react"
+import { SentientSphere } from "./sentient-sphere"
 
 interface PricingProps {
   isOpen: boolean
   onClose: () => void
 }
 
-const features = {
-  standard: [
-    { text: "1x Custom High-Quality GFX Design", included: true },
-    { text: "Max 2 Revision Rounds", included: true },
-    { text: "Standard 3-Day Delivery Turnaround", included: true },
-    { text: "Bulk Order Restriction: For orders of 3+ designs, please contact directly", included: true },
-  ],
-  premium: [
-    { text: "1x Custom High-Quality GFX Design", included: true },
-    { text: "Unlimited Revision Requests", included: true },
-    { text: "Priority 24-Hour Express Delivery", included: true },
-    { text: "High-Priority Project Queue Placement", included: true },
-    { text: "1-Month Post-Delivery Archive Storage Guarantee", included: true },
-    { text: "ADD-ON BONUS: Add a 2nd 'Standard' design for just 20-25R$ (FREE if paying with Full Nitro)", included: true },
-    { text: "Bulk Order Info: To purchase multiple premium slots, please contact directly", included: true },
-  ],
-}
+type Currency = "robux" | "nitro"
+type PlanKey = "standard" | "premium" | "commercial"
+
+const plans = [
+  {
+    key: "standard" as const,
+    name: "Standard Tier",
+    robux: "80 – 250 R$",
+    nitro: "1 Basic Nitro",
+    usd: "$2.99 USD",
+    scope: "Simple PFPs, clean wallpapers, light overlays, or matching profile sets.",
+    features: ["Basic lighting & typography", "2 minor revisions", "Standard turnaround"],
+  },
+  {
+    key: "premium" as const,
+    name: "Premium Tier",
+    robux: "400 – 600 R$",
+    nitro: "1 Full Nitro",
+    usd: "$9.99 USD",
+    scope: "Heavy typography, complex anime/game edits, high-effort thumbnails, or bulk PFP sets.",
+    features: ["Advanced layering & custom textures", "Priority delivery", "7-day draft revision window", "Project queue boost"],
+  },
+  {
+    key: "commercial" as const,
+    name: "Commercial / Studio",
+    robux: "1000 – 1500 R$",
+    nitro: "2–3 Full Nitros",
+    usd: "$19.99 – $29.99 USD",
+    scope: "High-end ad posters, commercial banners, full shop headers, and business identity visuals.",
+    features: ["Full commercial usage rights", "Source files, if available", "30-day draft revision window", "High priority support"],
+  },
+]
+
+const tos = [
+  "100% upfront payment is required before work starts.",
+  "Nitro payment MUST be given through the gift links.",
+  "Non-refundable once project work has officially begun.",
+  "Revisions are restricted to the designated timeframe after draft delivery: 7 days for Premium and 30 days for Commercial.",
+  "Strictly NO NSFW or explicit content commissions are accepted.",
+  "DEMIGOD_GFX retains full rights to showcase finished designs in portfolios and promotional media.",
+]
 
 export function Pricing({ isOpen, onClose }: PricingProps) {
+  const [currency, setCurrency] = useState<Currency>("robux")
+  const [selectedPlan, setSelectedPlan] = useState<PlanKey | null>(null)
+  const [step, setStep] = useState<1 | 2>(1)
+  const [copied, setCopied] = useState(false)
+
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = "unset"
-    }
-    return () => {
-      document.body.style.overflow = "unset"
-    }
+    document.body.style.overflow = isOpen ? "hidden" : "unset"
+    return () => { document.body.style.overflow = "unset" }
   }, [isOpen])
+
+  const openOrder = (plan: PlanKey) => {
+    setSelectedPlan(plan)
+    setStep(1)
+    setCopied(false)
+  }
+
+  const closeOrder = () => {
+    setSelectedPlan(null)
+    setStep(1)
+    setCopied(false)
+  }
+
+  const selected = plans.find((plan) => plan.key === selectedPlan)
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-40 flex items-center justify-center bg-background/75 p-4 backdrop-blur-xl sm:p-6 md:p-8"
-        >
-          {/* Close Button */}
-          <motion.button
-            onClick={onClose}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            whileHover={{ scale: 1.1, rotate: 90 }}
-            whileTap={{ scale: 0.9 }}
-            className="absolute top-6 sm:top-8 left-6 sm:left-8 text-white hover:text-white/70 transition-colors z-50"
-            aria-label="Close pricing"
-          >
-            <X className="w-6 h-6 sm:w-8 sm:h-8" />
-          </motion.button>
-
-          {/* Main Content Container */}
-          <div className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto">
-            {/* Header */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-center mb-8 sm:mb-12 md:mb-16"
-            >
-              <h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-light tracking-tight text-white mb-3 sm:mb-4">
-                Pricing Plans
-              </h2>
-              <p className="text-white/60 text-sm sm:text-base font-light">
-                Choose the perfect plan for your GFX design needs
-              </p>
-            </motion.div>
-
-            {/* Pricing Cards Grid */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 md:gap-8"
-            >
-              {/* Standard Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="group relative overflow-hidden rounded-[1.75rem] border border-white/25 bg-white/[0.09] shadow-2xl shadow-black/30 backdrop-blur-2xl backdrop-saturate-150 transition-all duration-300 hover:border-white/45 hover:bg-white/[0.14]"
-              >
-                {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                {/* Content */}
-                <div className="relative p-6 sm:p-8 h-full flex flex-col justify-between">
-                  {/* Title */}
-                  <div>
-                    <h3 className="font-sans text-2xl sm:text-3xl font-light tracking-tight text-white mb-6 sm:mb-8">
-                      Standard Tier
-                    </h3>
-
-                    {/* Price Section - Always Visible */}
-                    <div className="mb-8 sm:mb-10">
-                      <div className="space-y-2 sm:space-y-3">
-                        <p className="font-mono text-xs sm:text-sm text-white/70">STARTING AT</p>
-                        <p className="font-sans text-3xl sm:text-4xl md:text-5xl font-light text-white">
-                          50-60 R$
-                        </p>
-                        <p className="text-white/50 text-xs sm:text-sm font-mono pt-2">OR</p>
-                        <p className="font-sans text-xl sm:text-2xl md:text-3xl font-light text-white pt-1">
-                          1 Basic Nitro
-                        </p>
-                        <p className="text-white/40 text-xs sm:text-sm font-mono pt-1">
-                          ($2.99 USD)
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Features */}
-                    <div className="space-y-3 sm:space-y-4 mb-8 sm:mb-10">
-                      {features.standard.map((feature, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.4, delay: 0.3 + index * 0.05 }}
-                          className="flex gap-3 sm:gap-4 items-start"
-                        >
-                          <Check className="w-4 h-4 sm:w-5 sm:h-5 text-white/70 flex-shrink-0 mt-0.5" />
-                          <span className="text-xs sm:text-sm text-white/70 font-light leading-snug">
-                            {feature.text}
-                          </span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* CTA Button */}
-                  <motion.a
-                    href="mailto:demigod.business1@gmail.com?subject=Standard%20GFX%20Order%20Inquiry&body=Hi%20Demigod%2C%0A%0AI%27d%20like%20to%20order%20the%20Standard%20Tier.%0A%0AProject%20details%3A"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full px-6 py-3 sm:py-4 rounded-lg border border-white/30 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-mono text-xs sm:text-sm tracking-wider transition-all duration-300 hover:border-white/50 text-center block"
-                  >
-                    Select Plan
-                  </motion.a>
-                </div>
-              </motion.div>
-
-              {/* Premium Card - Recommended */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="group relative overflow-hidden rounded-[1.75rem] border border-white/35 bg-white/[0.12] shadow-2xl shadow-purple-950/30 backdrop-blur-2xl backdrop-saturate-150 transition-all duration-300 hover:border-white/60 hover:bg-white/[0.18] md:scale-105 md:origin-center"
-              >
-                {/* Recommended Badge */}
-                <div className="absolute top-0 right-0 px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 border-b border-l border-white/30 text-purple-300 text-xs sm:text-sm font-mono tracking-widest">
-                  RECOMMENDED
-                </div>
-
-                {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                {/* Content */}
-                <div className="relative p-6 sm:p-8 h-full flex flex-col justify-between">
-                  {/* Title */}
-                  <div>
-                    <h3 className="font-sans text-2xl sm:text-3xl font-light tracking-tight text-white mb-6 sm:mb-8">
-                      Premium Tier
-                    </h3>
-
-                    {/* Price Section - Always Visible */}
-                    <div className="mb-8 sm:mb-10">
-                      <div className="space-y-2 sm:space-y-3">
-                        <p className="font-mono text-xs sm:text-sm text-white/70">STARTING AT</p>
-                        <p className="font-sans text-3xl sm:text-4xl md:text-5xl font-light text-white">
-                          80-100 R$
-                        </p>
-                        <p className="text-white/50 text-xs sm:text-sm font-mono pt-2">OR</p>
-                        <p className="font-sans text-xl sm:text-2xl md:text-3xl font-light text-white pt-1">
-                          1 Full Nitro
-                        </p>
-                        <p className="text-white/40 text-xs sm:text-sm font-mono pt-1">
-                          ($9.99 USD)
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Features */}
-                    <div className="space-y-3 sm:space-y-4 mb-8 sm:mb-10">
-                      {features.premium.map((feature, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.4, delay: 0.4 + index * 0.05 }}
-                          className="flex gap-3 sm:gap-4 items-start"
-                        >
-                          <Check className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                          <span className="text-xs sm:text-sm text-white/75 font-light leading-snug">
-                            {feature.text}
-                          </span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* CTA Button - Premium Style */}
-                  <motion.a
-                    href="mailto:demigod.business1@gmail.com?subject=Premium%20GFX%20Order%20Inquiry&body=Hi%20Demigod%2C%0A%0AI%27d%20like%20to%20order%20the%20Premium%20Tier.%0A%0AProject%20details%3A"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full px-6 py-3 sm:py-4 rounded-lg bg-gradient-to-r from-purple-600/80 to-blue-600/80 hover:from-purple-600 hover:to-blue-600 border border-white/30 backdrop-blur-md text-white font-mono text-xs sm:text-sm tracking-wider transition-all duration-300 hover:border-white/50 text-center block"
-                  >
-                    Select Plan
-                  </motion.a>
-                </div>
-              </motion.div>
-            </motion.div>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 flex items-center justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-xl sm:p-8">
+          <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-45 blur-2xl">
+            <SentientSphere />
           </div>
+          <button onClick={onClose} aria-label="Close pricing" className="absolute left-4 top-4 z-20 flex size-11 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/75 transition hover:bg-white/20 hover:text-white sm:left-8 sm:top-8">
+            <X data-icon="inline-start" />
+          </button>
+
+          <div className="relative z-10 mx-auto w-full max-w-7xl py-12 sm:py-8">
+            <header className="mx-auto mb-8 max-w-2xl text-center sm:mb-10">
+              <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.35em] text-blue-300/80">DEMIGOD_GFX / SERVICES</p>
+              <h2 className="font-sans text-4xl font-light tracking-tight text-white sm:text-6xl">Pricing</h2>
+              <p className="mt-3 text-sm leading-6 text-white/60 sm:text-base">Choose which tier fits your idea and click on the button to make it real</p>
+              <button onClick={() => { onClose(); window.setTimeout(() => window.dispatchEvent(new Event("openGallery")), 350) }} className="mt-5 rounded-full border border-white/20 bg-white/10 px-4 py-2 font-mono text-[11px] tracking-wide text-white/80 backdrop-blur-xl transition hover:border-blue-300/60 hover:bg-white/15 hover:text-white">
+                Unsure? Take a look at some sample designs first!
+              </button>
+              <div className="mx-auto mt-5 inline-flex rounded-full border border-white/20 bg-white/10 p-1 backdrop-blur-xl" aria-label="Currency switcher">
+                <button onClick={() => setCurrency("robux")} className={`rounded-full px-4 py-1.5 font-mono text-xs transition ${currency === "robux" ? "bg-white text-black" : "text-white/60 hover:text-white"}`}>Robux</button>
+                <button onClick={() => setCurrency("nitro")} className={`rounded-full px-4 py-1.5 font-mono text-xs transition ${currency === "nitro" ? "bg-white text-black" : "text-white/60 hover:text-white"}`}>Nitro / USD</button>
+              </div>
+            </header>
+
+            <div className="grid gap-5 lg:grid-cols-3">
+              {plans.map((plan, index) => (
+                <motion.article key={plan.key} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.08 }} className={`group relative flex flex-col overflow-hidden rounded-[1.75rem] border p-6 shadow-2xl backdrop-blur-2xl backdrop-saturate-150 sm:p-7 ${plan.key === "premium" ? "border-blue-200/50 bg-white/[0.14] shadow-blue-950/50 lg:-translate-y-3" : "border-white/20 bg-white/[0.08] shadow-black/30"}`}>
+                  {plan.key === "premium" && <div className="pointer-events-none absolute -top-32 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-gradient-to-br from-blue-400/40 via-amber-200/20 to-transparent blur-3xl" />}
+                  <div className="relative flex-1">
+                    {plan.key === "premium" && <span className="mb-5 inline-flex rounded-full border border-amber-200/30 bg-amber-100/10 px-3 py-1 font-mono text-[10px] tracking-[0.2em] text-amber-100">MOST PREFERRED</span>}
+                    <h3 className="text-2xl font-light text-white">{plan.name}</h3>
+                    <p className="mt-5 min-h-14 text-sm leading-6 text-white/60">{plan.scope}</p>
+                    <div className="my-7 border-y border-white/10 py-5">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40">{currency === "robux" ? "Robux pricing" : "Nitro / USD pricing"}</p>
+                      <p className="mt-2 text-3xl font-light text-white">{currency === "robux" ? plan.robux : plan.nitro}</p>
+                      <p className="mt-1 text-sm text-white/45">{currency === "robux" ? `or ${plan.nitro} · ${plan.usd}` : plan.usd}</p>
+                    </div>
+                    <ul className="flex flex-col gap-3">
+                      {plan.features.map((feature) => <li key={feature} className="flex gap-3 text-sm leading-5 text-white/75"><Check className="mt-0.5 size-4 shrink-0 text-blue-300" />{feature}</li>)}
+                    </ul>
+                  </div>
+                  <button onClick={() => openOrder(plan.key)} className={`relative mt-8 w-full rounded-xl border px-4 py-3 font-mono text-xs tracking-wider transition ${plan.key === "premium" ? "border-blue-200/40 bg-blue-400/20 text-white hover:bg-blue-400/35" : "border-white/20 bg-white/10 text-white/80 hover:bg-white/20 hover:text-white"}`}>Select Plan</button>
+                </motion.article>
+              ))}
+            </div>
+          </div>
+
+          <AnimatePresence>
+            {selectedPlan && selected && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-30 flex items-center justify-center bg-black/70 p-4 backdrop-blur-2xl">
+                <motion.div initial={{ opacity: 0, y: 18, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-[1.75rem] border border-white/20 bg-[#101217]/90 p-6 shadow-2xl shadow-black/50 sm:p-8">
+                  <button onClick={closeOrder} aria-label="Close order modal" className="absolute right-4 top-4 flex size-10 items-center justify-center rounded-full text-white/50 transition hover:bg-white/10 hover:text-white"><X /></button>
+                  {step === 2 && <button onClick={() => setStep(1)} aria-label="Back to terms" className="absolute left-4 top-4 flex size-10 items-center justify-center rounded-full text-white/50 transition hover:bg-white/10 hover:text-white"><ChevronLeft /></button>}
+                  {step === 1 ? (
+                    <>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-blue-300">Step 1 / 2 · {selected.name}</p>
+                      <h3 className="mt-3 text-3xl font-light text-white">Terms of Service</h3>
+                      <p className="mt-2 text-sm text-white/50">Please read these terms before reaching out.</p>
+                      <ol className="mt-7 flex flex-col gap-4">{tos.map((item, index) => <li key={item} className="flex gap-3 text-sm leading-6 text-white/70"><span className="font-mono text-xs text-blue-300">0{index + 1}</span><span>{item}</span></li>)}</ol>
+                      <button onClick={() => setStep(2)} className="mt-8 w-full rounded-xl bg-white px-4 py-3 font-mono text-xs tracking-wide text-black transition hover:bg-blue-100">I Have Read &amp; Agree to the Terms</button>
+                    </>
+                  ) : (
+                    <>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-blue-300">Step 2 / 2 · {selected.name}</p>
+                      <h3 className="mt-3 text-3xl font-light text-white">Choose How to Reach Out</h3>
+                      <div className="mt-8 flex flex-col gap-3">
+                        <button onClick={async () => { await navigator.clipboard?.writeText("@demigod_gfx"); setCopied(true) }} className="flex items-center justify-between rounded-xl border border-white/15 bg-white/5 px-4 py-4 text-left transition hover:bg-white/10"><span className="flex items-center gap-3 text-sm text-white"><Copy className="size-4 text-blue-300" />Discord <span className="text-white/50">@demigod_gfx</span></span><span className="font-mono text-[10px] text-white/40">{copied ? "COPIED" : "COPY"}</span></button>
+                        <a href="mailto:demigod.business1@gmail.com" onClick={closeOrder} className="flex items-center gap-3 rounded-xl border border-white/15 bg-white/5 px-4 py-4 text-sm text-white transition hover:bg-white/10"><Mail className="size-4 text-blue-300" />Gmail <span className="text-white/50">demigod.business1@gmail.com</span></a>
+                      </div>
+                      <p className="mt-6 text-center text-xs leading-5 text-white/40">Please allow up to 48 hours after reaching out for your request to be reviewed and accepted.</p>
+                    </>
+                  )}
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>

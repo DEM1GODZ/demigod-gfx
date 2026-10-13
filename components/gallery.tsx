@@ -44,8 +44,27 @@ const galleryItems = [
   {
     id: 7,
     title: "Minecraft Composition",
-    image: "/gallery/minecraft-composition.jpeg",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_26-06-22_23-38-57-895.png-ILUoj3FQLIWHkKbNDXmSDfe98p4AX6.jpeg",
     aspectRatio: 1.78,
+  },
+  {
+    id: 8,
+    title: "Demigod Character Study",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_26-10-03_02-40-52-408-6sTSqUPcjRmdSYMehM07shmoVbFpQ8.jpg",
+    aspectRatio: 1,
+  },
+  {
+    id: 9,
+    title: "Ink & Orbit",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_26-07-31_09-14-19-836-5z8OTHhqh5azvuOVzassj2kDQLCQBZ.jpg",
+    aspectRatio: 0.8,
+  },
+  {
+    id: 10,
+    title: "There's More",
+    image: "",
+    aspectRatio: 1,
+    isMore: true,
   },
 ]
 
@@ -106,7 +125,18 @@ export function Gallery({ isOpen, onClose }: GalleryProps) {
                 }}
               >
                 <AnimatePresence mode="wait">
-                  {selectedItem && (
+                  {selectedItem && (selectedItem.isMore ? (
+                    <motion.div
+                      key="more-card"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      className="flex h-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-blue-950/80 via-background to-purple-950/70 text-center"
+                    >
+                      <span className="font-sans text-6xl font-light text-white">?</span>
+                      <span className="font-mono text-sm uppercase tracking-[0.3em] text-white/70">There&apos;s More</span>
+                    </motion.div>
+                  ) : (
                     <motion.img
                       key={`img-${selectedItem.id}`}
                       src={selectedItem.image}
@@ -117,7 +147,7 @@ export function Gallery({ isOpen, onClose }: GalleryProps) {
                       transition={{ duration: 0.35, ease: "easeOut" }}
                       className="w-full h-full object-contain"
                     />
-                  )}
+                  ))}
                 </AnimatePresence>
               </motion.div>
 
@@ -132,6 +162,14 @@ export function Gallery({ isOpen, onClose }: GalleryProps) {
                 <p className="font-sans text-sm md:text-base font-light tracking-tight text-white/80">
                   All designs are original. Made by @demigod_gfx
                 </p>
+                <a
+                  href="https://www.pinterest.com/demigod_gfx/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-block font-mono text-xs tracking-wide text-blue-400 transition-colors hover:text-blue-300"
+                >
+                  Check out @demigod_gfx for more samples!
+                </a>
               </motion.div>
 
             </div>
@@ -151,12 +189,16 @@ export function Gallery({ isOpen, onClose }: GalleryProps) {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <div className="w-20 md:w-full h-20 md:h-32 relative overflow-hidden bg-black flex-shrink-0">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+                    <div className="relative flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden bg-black md:h-32 md:w-full">
+                      {item.isMore ? (
+                        <span className="font-sans text-4xl font-light text-white/80">?</span>
+                      ) : (
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      )}
                       <motion.div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300" />
                     </div>
 
