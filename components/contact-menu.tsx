@@ -19,7 +19,7 @@ const contactOptions = [
   },
   {
     label: "Discord",
-    detail: "demigod_akshu",
+    detail: "demigod_gfx",
     href: "#discord",
     icon: MessageCircle,
     action: "Copy username",
