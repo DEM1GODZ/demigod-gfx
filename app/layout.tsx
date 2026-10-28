@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "AI-Native Product Builder | Portfolio",
-  description: "System Architect & Interface Designer crafting intelligent digital experiences",
+  title: "Demigod_GFX | Portfolio",
+  description: "Professional graphic designer. Commissions start at 80 R$ or 1 Basic Nitro only.",
     generator: 'v0.app'
 }
 
