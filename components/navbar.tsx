@@ -13,9 +13,13 @@ interface NavbarProps {
   isGalleryOpen: boolean
   onGalleryClose: () => void
   onGalleryOpen: () => void
+  isPricingOpen?: boolean
+  onPricingClose?: () => void
+  isContactOpen?: boolean
+  onContactClose?: () => void
 }
 
-export function Navbar({ isGalleryOpen, onGalleryClose, onGalleryOpen }: NavbarProps) {
+export function Navbar({ isGalleryOpen, onGalleryClose, onGalleryOpen, isPricingOpen, onPricingClose, isContactOpen, onContactClose }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -32,6 +36,12 @@ export function Navbar({ isGalleryOpen, onGalleryClose, onGalleryOpen }: NavbarP
     if (isGalleryOpen) {
       onGalleryClose()
     }
+    if (isPricingOpen && onPricingClose) {
+      onPricingClose()
+    }
+    if (isContactOpen && onContactClose) {
+      onContactClose()
+    }
     setTimeout(() => {
       const element = document.querySelector(href)
       if (element) {
@@ -41,9 +51,17 @@ export function Navbar({ isGalleryOpen, onGalleryClose, onGalleryOpen }: NavbarP
   }
 
   const handleNavClick = (label: string) => {
+    setIsMenuOpen(false)
+    if (isPricingOpen && onPricingClose) {
+      onPricingClose()
+    }
+    if (isContactOpen && onContactClose) {
+      onContactClose()
+    }
     if (label === "Works") {
-      setIsMenuOpen(false)
-      onGalleryOpen()
+      setTimeout(() => {
+        onGalleryOpen()
+      }, 300)
     } else if (label === "Contact") {
       scrollToSection("#footer")
     } else {
@@ -56,6 +74,12 @@ export function Navbar({ isGalleryOpen, onGalleryClose, onGalleryOpen }: NavbarP
     setIsMenuOpen(false)
     if (isGalleryOpen) {
       onGalleryClose()
+    }
+    if (isPricingOpen && onPricingClose) {
+      onPricingClose()
+    }
+    if (isContactOpen && onContactClose) {
+      onContactClose()
     }
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: "smooth" })

@@ -35,6 +35,37 @@ const galleryItems = [
     image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/b2665b8598c8cc6875173c09b333e107-IUTryvtN9j0YggyJ1kyzM8EBMYk7t7.jpg",
     aspectRatio: 1.25,
   },
+  {
+    id: 6,
+    title: "Malevolent Crunch",
+    image: "/gallery/malevolent-crunch.jpg",
+    aspectRatio: 1.42,
+  },
+  {
+    id: 7,
+    title: "Minecraft Composition",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_26-06-22_23-38-57-895.png-ILUoj3FQLIWHkKbNDXmSDfe98p4AX6.jpeg",
+    aspectRatio: 1.78,
+  },
+  {
+    id: 8,
+    title: "Demigod Character Study",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_26-10-03_02-40-52-408-6sTSqUPcjRmdSYMehM07shmoVbFpQ8.jpg",
+    aspectRatio: 1,
+  },
+  {
+    id: 9,
+    title: "Ink & Orbit",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_26-07-31_09-14-19-836-5z8OTHhqh5azvuOVzassj2kDQLCQBZ.jpg",
+    aspectRatio: 0.8,
+  },
+  {
+    id: 10,
+    title: "There's More",
+    image: "",
+    aspectRatio: 1,
+    isMore: true,
+  },
 ]
 
 interface GalleryProps {
@@ -65,24 +96,47 @@ export function Gallery({ isOpen, onClose }: GalleryProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-40 bg-background"
+          className="fixed inset-0 z-40 bg-background overflow-hidden"
         >
           {/* Main Gallery Container */}
           <div className="relative w-full h-screen flex flex-col md:flex-row overflow-hidden">
             {/* Left Main Content - Large Dynamic Frame */}
-            <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-12 relative border-r border-white/10">
+            <div className="flex-1 flex flex-col items-center justify-center overflow-y-auto p-4 md:p-12 relative md:border-r border-white/10">
+              {/* Close Button - Fixed at top */}
+              <motion.button
+                onClick={onClose}
+                data-cursor-hover
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
+                className="absolute top-4 md:top-8 left-4 md:left-8 text-white hover:text-white/70 transition-colors z-50"
+                aria-label="Close gallery"
+              >
+                <X className="w-8 h-8" />
+              </motion.button>
+
               <motion.div
                 layoutId="gallery-frame"
                 transition={{ 
                   layout: { duration: 0.5, ease: "easeInOut" }
                 }}
-                className="relative w-full h-auto max-h-[70vh] bg-black rounded-lg overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-300"
+                className="relative w-full max-w-lg md:max-w-none h-auto max-h-[50vh] md:max-h-[70vh] bg-black rounded-lg overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-300 mt-12 md:mt-0"
                 style={{
                   aspectRatio: selectedItem?.aspectRatio || 1.5,
                 }}
               >
                 <AnimatePresence mode="wait">
-                  {selectedItem && (
+                  {selectedItem && (selectedItem.isMore ? (
+                    <motion.div
+                      key="more-card"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      className="flex h-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-blue-950/80 via-background to-purple-950/70 text-center"
+                    >
+                      <span className="font-sans text-6xl font-light text-white">?</span>
+                      <span className="font-mono text-sm uppercase tracking-[0.3em] text-white/70">There&apos;s More</span>
+                    </motion.div>
+                  ) : (
                     <motion.img
                       key={`img-${selectedItem.id}`}
                       src={selectedItem.image}
@@ -93,7 +147,7 @@ export function Gallery({ isOpen, onClose }: GalleryProps) {
                       transition={{ duration: 0.35, ease: "easeOut" }}
                       className="w-full h-full object-contain"
                     />
-                  )}
+                  ))}
                 </AnimatePresence>
               </motion.div>
 
@@ -108,29 +162,26 @@ export function Gallery({ isOpen, onClose }: GalleryProps) {
                 <p className="font-sans text-sm md:text-base font-light tracking-tight text-white/80">
                   All designs are original. Made by @demigod_gfx
                 </p>
+                <a
+                  href="https://www.pinterest.com/demigod_gfx/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-block font-mono text-xs tracking-wide text-blue-400 transition-colors hover:text-blue-300"
+                >
+                  Check out @demigod_gfx for more samples!
+                </a>
               </motion.div>
 
-              {/* Close Button */}
-              <motion.button
-                onClick={onClose}
-                data-cursor-hover
-                whileHover={{ scale: 1.1, rotate: 90 }}
-                whileTap={{ scale: 0.9 }}
-                className="absolute top-8 left-8 text-white hover:text-white/70 transition-colors z-50"
-                aria-label="Close gallery"
-              >
-                <X className="w-8 h-8" />
-              </motion.button>
             </div>
 
-            {/* Right Sidebar - Scrollable Thumbnails */}
-            <div className="w-full md:w-72 flex-shrink-0 border-l border-white/10 bg-background/50 backdrop-blur-sm overflow-y-auto">
-              <div className="flex flex-col gap-2 p-4">
+            {/* Right Sidebar - Scrollable Thumbnails - Mobile Horizontal, Desktop Vertical */}
+            <div className="w-full md:w-72 flex-shrink-0 md:border-l md:border-t-0 border-t border-white/10 bg-background/50 backdrop-blur-sm overflow-x-auto md:overflow-x-visible md:overflow-y-auto">
+              <div className="flex md:flex-col gap-2 p-4">
                 {galleryItems.map((item) => (
                   <motion.button
                     key={item.id}
                     onClick={() => setSelectedId(item.id)}
-                    className={`relative rounded-lg overflow-hidden border transition-all duration-300 text-left group ${
+                    className={`relative rounded-lg overflow-hidden border transition-all duration-300 text-left group flex-shrink-0 md:flex-shrink md:w-full ${
                       selectedId === item.id
                         ? "border-white/80 ring-2 ring-[#2563eb]"
                         : "border-white/20 hover:border-white/40"
@@ -138,12 +189,16 @@ export function Gallery({ isOpen, onClose }: GalleryProps) {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <div className="w-full h-32 relative overflow-hidden bg-black">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+                    <div className="relative flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden bg-black md:h-32 md:w-full">
+                      {item.isMore ? (
+                        <span className="font-sans text-4xl font-light text-white/80">?</span>
+                      ) : (
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      )}
                       <motion.div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300" />
                     </div>
 
